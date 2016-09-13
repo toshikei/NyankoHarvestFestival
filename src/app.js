@@ -1,5 +1,9 @@
 var itemsLayer;
 var cart;
+
+var basket;
+catArray = [res.cart00_png,res.cart01_png,res.cart02_png];
+
 var xSpeed = 0; //カートの移動速度
 
 var detectedX;　 //現在タッチしているX座標
@@ -33,17 +37,27 @@ var game = cc.Layer.extend({
     itemsLayer = cc.Layer.create();
     this.addChild(itemsLayer);
 
-    //ショッピングカートを操作するレイヤー
+    //猫を操作するレイヤー
     topLayer = cc.Layer.create();
     this.addChild(topLayer);
-    cart = cc.Sprite.create(res.cart_png);
+    cart = cc.Sprite.create(res.cart00_png);
     topLayer.addChild(cart, 0);
-    cart.setPosition(240, 24);
+    //猫の位置
+    cart.setPosition(240, 80);
     this.schedule(this.addItem, 1);
     //タッチイベントのリスナー追加
     cc.eventManager.addListener(touchListener, this);
     //カートの移動のため　Update関数を1/60秒ごと実行させる　
     this.scheduleUpdate();
+
+    //籠を操作するレイヤー
+    kagoLayer = cc.Layer.create();
+    this.addChild(kagoLayer);
+    basket = cc.Sprite.create(res.basket_png);
+    cart.addChild(basket, 0);
+    // 籠の設定
+    basket.setPosition(70,70);
+    this.schedule(this.addItem, 1);
   },
   addItem: function() {
     var item = new Item();
