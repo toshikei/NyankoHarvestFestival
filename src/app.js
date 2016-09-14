@@ -1,8 +1,8 @@
 var itemsLayer;
-var cart;
+var cat;
 
 var basket;
-catArray = [res.cart00_png,res.cart01_png,res.cart02_png];
+catArray = [res.cat00_png,res.cat01_png,res.cat02_png];
 
 var xSpeed = 0; //カートの移動速度
 
@@ -40,25 +40,31 @@ var game = cc.Layer.extend({
     //猫を操作するレイヤー
     topLayer = cc.Layer.create();
     this.addChild(topLayer);
-    cart = cc.Sprite.create(res.cart00_png);
-    topLayer.addChild(cart, 0);
+    cat = cc.Sprite.create(res.cat00_png);
+    basket = cc.Sprite.create(res.basket_png);
+    topLayer.addChild(cat, 0);
+    topLayer.addChild(basket, 0);
     //猫の位置
-    cart.setPosition(240, 80);
+    cat.setPosition(240, 80);
+    cat.setScale(1);
     this.schedule(this.addItem, 1);
+    // 籠の設定(猫が反対になってもそれに追従して反対にしたい)
+    basket.setPosition(260,100);
+    basket.setScale(1);
+    topLayer.addChild(cat, 0);
     //タッチイベントのリスナー追加
     cc.eventManager.addListener(touchListener, this);
     //カートの移動のため　Update関数を1/60秒ごと実行させる　
     this.scheduleUpdate();
-
-    //籠を操作するレイヤー
-    kagoLayer = cc.Layer.create();
-    this.addChild(kagoLayer);
-    basket = cc.Sprite.create(res.basket_png);
-    cart.addChild(basket, 0);
-    // 籠の設定
-    basket.setPosition(70,70);
-    this.schedule(this.addItem, 1);
+    /* // 雲のレイヤー
+        kumoLayer = cc.Layer.create();
+        this.addChild(kumoLayer);
+        kumo = cc.Sprite.create(res.game_cloud_png);
+        kumoLayer.addChild(kumo, 0);
+        kumo.setPosition(450, 300);
+        */
   },
+
   addItem: function() {
     var item = new Item();
     itemsLayer.addChild(item, 1);
@@ -80,14 +86,19 @@ var game = cc.Layer.extend({
       }
       //saveXに今回のX座標を代入し、onTouchMovedイベントで
       //detectedX変数が更新されても対応できるようにする
+      //籠も反転させる
       savedX = detectedX;
       if (xSpeed > 0) {
-        cart.setFlippedX(true);
+        cat.setFlippedX(true);
+        basket.setFlippedX(true);
+        basket.setPosition(cat.getPosition().x -20, cat.getPosition().y+20);
       }
       if (xSpeed < 0) {
-        cart.setFlippedX(false);
+        cat.setFlippedX(false);
+        basket.setFlippedX(false);
+        basket.setPosition(cat.getPosition().x +20, cat.getPosition().y+20);
       }
-      cart.setPosition(cart.getPosition().x + xSpeed, cart.getPosition().y);
+      cat.setPosition(cat.getPosition().x + xSpeed, cat.getPosition().y);
     }
   }
 
@@ -98,10 +109,10 @@ var Item = cc.Sprite.extend({
     this._super();
     //ランダムに爆弾と果物を生成する
     if (Math.random() < 0.5) {
-      this.initWithFile(res.bomb_png);
+      this.initWithFile(res.bug_png);
       this.isBomb = true;
     } else {
-      this.initWithFile(res.strawberry_png);
+      this.initWithFile(res.apple_png);
       this.isBomb = false;
     }
   },
@@ -118,12 +129,12 @@ var Item = cc.Sprite.extend({
   update: function(dt) {
     //果物の処理　座標をチェックしてカートの接近したら
     if (this.getPosition().y < 35 && this.getPosition().y > 30 &&
-      Math.abs(this.getPosition().x - cart.getPosition().x) < 10 && !this.isBomb) {
+      Math.abs(this.getPosition().x - cat.getPosition().x) < 10 && !this.isBomb) {
       gameLayer.removeItem(this);
       console.log("FRUIT");
     }
     //爆弾の処理　座標をチェックしてカートの接近したら　フルーツより爆弾に当たりやすくしている
-    if (this.getPosition().y < 35 && Math.abs(this.getPosition().x - cart.getPosition().x) < 25 &&
+    if (this.getPosition().y < 35 && Math.abs(this.getPosition().x - cat.getPosition().x) < 25 &&
       this.isBomb) {
       gameLayer.removeItem(this);
       console.log("BOMB");

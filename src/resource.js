@@ -1,13 +1,11 @@
 var res = {
-  bomb_png: "res/resources/S/bug.png",
-  cart00_png: "res/resources/S/cat0.png",
-  cart01_png: "res/resources/S/cat1.png",
-  cart02_png: "res/resources/S/cat2.png",
+  bug_png: "res/resources/S/bug.png",
+  cat00_png: "res/resources/S/cat0.png",
+  cat01_png: "res/resources/S/cat1.png",
+  cat02_png: "res/resources/S/cat2.png",
   scare_png: "res/resources/S/cat3.png",
   basket_png: "res/resources/S/basket1.png",
-  strawberry_png: "res/resources/S/apple.png",
-//  leftbutton_png: "res/leftbutton.png",
-//  rightbutton_png: "res/rightbutton.png",
+  apple_png: "res/resources/S/apple.png",
   background_png: "res/resources/S/game_bg.png",
 //  touchorigin_png: "res/touchorigin.png",
 //  touchend_png: "res/touchend.png"
